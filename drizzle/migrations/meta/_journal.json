@@ -1,5 +1,13 @@
 {
   "version": "7",
   "dialect": "postgresql",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1788946948642,
+      "tag": "0000_profitpilot_core_schema",
+      "breakpoints": true
+    }
+  ]
 }
