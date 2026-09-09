@@ -14,7 +14,253 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      grocery_items: {
+        Row: {
+          created_at: string
+          id: string
+          is_available: boolean
+          is_purchased: boolean
+          name: string
+          notes: string | null
+          product_id: string | null
+          purchase_price: number
+          purchased_at: string | null
+          quantity_needed: number
+          supplier_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_available?: boolean
+          is_purchased?: boolean
+          name: string
+          notes?: string | null
+          product_id?: string | null
+          purchase_price?: number
+          purchased_at?: string | null
+          quantity_needed?: number
+          supplier_id?: string | null
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_available?: boolean
+          is_purchased?: boolean
+          name?: string
+          notes?: string | null
+          product_id?: string | null
+          purchase_price?: number
+          purchased_at?: string | null
+          quantity_needed?: number
+          supplier_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "grocery_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "grocery_items_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          category: string
+          cost_price: number
+          created_at: string
+          id: string
+          is_available: boolean
+          min_stock: number
+          name: string
+          notes: string | null
+          quantity: number
+          selling_price: number
+          sku: string | null
+          supplier_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          cost_price?: number
+          created_at?: string
+          id?: string
+          is_available?: boolean
+          min_stock?: number
+          name: string
+          notes?: string | null
+          quantity?: number
+          selling_price?: number
+          sku?: string | null
+          supplier_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          category?: string
+          cost_price?: number
+          created_at?: string
+          id?: string
+          is_available?: boolean
+          min_stock?: number
+          name?: string
+          notes?: string | null
+          quantity?: number
+          selling_price?: number
+          sku?: string | null
+          supplier_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          business_name: string
+          created_at: string
+          currency_code: string
+          full_name: string | null
+          id: string
+          low_stock_buffer: number
+          opening_balance: number
+          overstock_multiplier: number
+          updated_at: string
+        }
+        Insert: {
+          business_name?: string
+          created_at?: string
+          currency_code?: string
+          full_name?: string | null
+          id: string
+          low_stock_buffer?: number
+          opening_balance?: number
+          overstock_multiplier?: number
+          updated_at?: string
+        }
+        Update: {
+          business_name?: string
+          created_at?: string
+          currency_code?: string
+          full_name?: string | null
+          id?: string
+          low_stock_buffer?: number
+          opening_balance?: number
+          overstock_multiplier?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      suppliers: {
+        Row: {
+          address: string | null
+          contact_name: string | null
+          created_at: string
+          email: string | null
+          id: string
+          is_available: boolean
+          name: string
+          notes: string | null
+          phone: string | null
+          products_supplied: string | null
+          purchase_price: number | null
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          contact_name?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_available?: boolean
+          name: string
+          notes?: string | null
+          phone?: string | null
+          products_supplied?: string | null
+          purchase_price?: number | null
+          user_id?: string
+        }
+        Update: {
+          address?: string | null
+          contact_name?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_available?: boolean
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          products_supplied?: string | null
+          purchase_price?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          is_upcoming: boolean
+          occurred_on: string
+          product_id: string | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_upcoming?: boolean
+          occurred_on?: string
+          product_id?: string | null
+          type: string
+          user_id?: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_upcoming?: boolean
+          occurred_on?: string
+          product_id?: string | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
