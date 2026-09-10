@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedAiDecisionsRouteImport } from './routes/_authenticated/ai-decisions'
 import { Route as AuthenticatedCashFlowRouteImport } from './routes/_authenticated/cash-flow'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedGroceryRouteImport } from './routes/_authenticated/grocery'
@@ -35,6 +36,12 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAiDecisionsRoute =
+  AuthenticatedAiDecisionsRouteImport.update({
+    id: '/ai-decisions',
+    path: '/ai-decisions',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedCashFlowRoute = AuthenticatedCashFlowRouteImport.update({
   id: '/cash-flow',
   path: '/cash-flow',
@@ -79,6 +86,7 @@ const AuthenticatedSuppliersRoute = AuthenticatedSuppliersRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/ai-decisions': typeof AuthenticatedAiDecisionsRoute
   '/cash-flow': typeof AuthenticatedCashFlowRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/grocery': typeof AuthenticatedGroceryRoute
@@ -91,6 +99,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/ai-decisions': typeof AuthenticatedAiDecisionsRoute
   '/cash-flow': typeof AuthenticatedCashFlowRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/grocery': typeof AuthenticatedGroceryRoute
@@ -105,6 +114,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/ai-decisions': typeof AuthenticatedAiDecisionsRoute
   '/_authenticated/cash-flow': typeof AuthenticatedCashFlowRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/grocery': typeof AuthenticatedGroceryRoute
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/ai-decisions'
     | '/cash-flow'
     | '/dashboard'
     | '/grocery'
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/ai-decisions'
     | '/cash-flow'
     | '/dashboard'
     | '/grocery'
@@ -144,6 +156,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/ai-decisions'
     | '/_authenticated/cash-flow'
     | '/_authenticated/dashboard'
     | '/_authenticated/grocery'
@@ -182,6 +195,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/ai-decisions': {
+      id: '/_authenticated/ai-decisions'
+      path: '/ai-decisions'
+      fullPath: '/ai-decisions'
+      preLoaderRoute: typeof AuthenticatedAiDecisionsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/cash-flow': {
       id: '/_authenticated/cash-flow'
@@ -243,6 +263,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAiDecisionsRoute: typeof AuthenticatedAiDecisionsRoute
   AuthenticatedCashFlowRoute: typeof AuthenticatedCashFlowRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedGroceryRoute: typeof AuthenticatedGroceryRoute
@@ -254,6 +275,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAiDecisionsRoute: AuthenticatedAiDecisionsRoute,
   AuthenticatedCashFlowRoute: AuthenticatedCashFlowRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedGroceryRoute: AuthenticatedGroceryRoute,
