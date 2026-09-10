@@ -44,18 +44,78 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+const SUPABASE_ORIGIN = (process.env["VITE_SUPABASE_URL"] ?? "https://*.supabase.co").replace(
+  /\/+$/,
+  "",
+);
+const SUPABASE_WS = SUPABASE_ORIGIN.replace(/^https:/, "wss:");
+
+const CSP = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'none'",
+  "form-action 'self'",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' data:",
+  "style-src 'self' 'unsafe-inline'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  `connect-src 'self' ${SUPABASE_ORIGIN} ${SUPABASE_WS} https://*.supabase.co wss://*.supabase.co`,
+].join("; ");
+
+// The Lovable editor renders the app inside an iframe, so frame blocking is
+// applied only on the published site, never on preview/sandbox hosts.
+function isEmbeddablePreviewHost(request: Request): boolean {
+  try {
+    const host = new URL(request.url).hostname;
+    return (
+      host === "localhost" ||
+      host === "127.0.0.1" ||
+      host.includes("id-preview--") ||
+      host.endsWith("-dev.lovable.app") ||
+      host.includes("sandbox")
+    );
+  } catch {
+    return true;
+  }
+}
+
+function withSecurityHeaders(request: Request, response: Response): Response {
+  const headers = new Headers(response.headers);
+  headers.set("X-Content-Type-Options", "nosniff");
+  headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=(), usb=()");
+  if (isEmbeddablePreviewHost(request)) {
+    headers.set(
+      "Content-Security-Policy",
+      CSP.replace("frame-ancestors 'none'", "frame-ancestors *"),
+    );
+  } else {
+    headers.set("X-Frame-Options", "DENY");
+    headers.set("Content-Security-Policy", CSP);
+  }
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      return withSecurityHeaders(request, await normalizeCatastrophicSsrResponse(response));
     } catch (error) {
       console.error(error);
-      return new Response(renderErrorPage(), {
-        status: 500,
-        headers: { "content-type": "text/html; charset=utf-8" },
-      });
+      return withSecurityHeaders(
+        request,
+        new Response(renderErrorPage(), {
+          status: 500,
+          headers: { "content-type": "text/html; charset=utf-8" },
+        }),
+      );
     }
   },
 };
