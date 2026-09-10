@@ -6,7 +6,7 @@ export const Route = createFileRoute("/auth")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Sign in — ProfitPilot" },
+      { title: "Sign in — ProfitPilot | Inventory & Cash Flow" },
       {
         name: "description",
         content: "Sign in or create your ProfitPilot workspace to manage stock, suppliers and cash flow.",
@@ -18,7 +18,9 @@ export const Route = createFileRoute("/auth")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:url", content: "https://profitpilot-business.lovable.app/auth" },
     ],
+    links: [{ rel: "canonical", href: "https://profitpilot-business.lovable.app/auth" }],
   }),
   component: AuthPage,
 });
@@ -94,8 +96,13 @@ function AuthPage() {
         <form onSubmit={submit} className="mt-5 space-y-3">
           {mode === "signup" ? (
             <div>
-              <div className="label-mono mb-1">Business name</div>
+              <label htmlFor="auth-business-name" className="label-mono mb-1 block">
+                Business name
+              </label>
               <input
+                id="auth-business-name"
+                name="organization"
+                autoComplete="organization"
                 className="field"
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
@@ -104,22 +111,32 @@ function AuthPage() {
             </div>
           ) : null}
           <div>
-            <div className="label-mono mb-1">Email</div>
+            <label htmlFor="auth-email" className="label-mono mb-1 block">
+              Email
+            </label>
             <input
+              id="auth-email"
+              name="email"
               className="field"
               type="email"
               required
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div>
-            <div className="label-mono mb-1">Password</div>
+            <label htmlFor="auth-password" className="label-mono mb-1 block">
+              Password
+            </label>
             <input
+              id="auth-password"
+              name={mode === "signin" ? "current-password" : "new-password"}
               className="field"
               type="password"
               required
               minLength={6}
+              autoComplete={mode === "signin" ? "current-password" : "new-password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
