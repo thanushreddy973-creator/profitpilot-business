@@ -79,7 +79,7 @@ function CashFlow() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    await save.mutateAsync({ id: editing?.id, values: form });
+    await save.mutateAsync({ ...(editing ? { id: editing.id } : {}), values: form });
     setOpen(false);
   }
 
