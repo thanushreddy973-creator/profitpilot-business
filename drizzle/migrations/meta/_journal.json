@@ -8,6 +8,13 @@
       "when": 1788946948642,
       "tag": "0000_profitpilot_core_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789026163934,
+      "tag": "0001_revoke_execute_handle_new_user",
+      "breakpoints": true
     }
   ]
 }
