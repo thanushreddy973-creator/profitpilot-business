@@ -164,3 +164,41 @@
   background-image: linear-gradient(to bottom, var(--elevated), var(--surface));
   box-shadow: inset 0 0 0 1px color-mix(in oklab, white 8%, transparent);
 }
+
+@utility field {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  background-color: var(--elevated);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, white 6%, transparent);
+  padding: 0.5rem 0.7rem;
+  font-size: 13px;
+  color: var(--color-foreground);
+  outline: none;
+}
+
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-accent);
+  color: var(--color-accent-foreground);
+  padding: 0.5rem 0.85rem;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+@utility btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: var(--radius-lg);
+  background-color: var(--elevated);
+  color: var(--color-muted-foreground);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, white 6%, transparent);
+  padding: 0.5rem 0.85rem;
+  font-size: 12.5px;
+  font-weight: 600;
+}
