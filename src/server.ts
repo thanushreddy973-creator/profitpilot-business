@@ -50,7 +50,7 @@ const SUPABASE_ORIGIN = (process.env["VITE_SUPABASE_URL"] ?? "https://*.supabase
 );
 const SUPABASE_WS = SUPABASE_ORIGIN.replace(/^https:/, "wss:");
 
-const CSP = [
+const BASE_CSP = [
   "default-src 'self'",
   "base-uri 'self'",
   "object-src 'none'",
@@ -62,6 +62,32 @@ const CSP = [
   "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
   `connect-src 'self' ${SUPABASE_ORIGIN} ${SUPABASE_WS} https://*.supabase.co wss://*.supabase.co`,
 ].join("; ");
+
+function createNonce(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(18));
+  return Buffer.from(bytes).toString("base64");
+}
+
+function strictCsp(nonce: string): string {
+  return [
+    "default-src 'self'",
+    "base-uri 'self'",
+    "object-src 'none'",
+    "frame-ancestors 'none'",
+    "form-action 'self'",
+    "img-src 'self' data: blob: https:",
+    "font-src 'self' data:",
+    `style-src 'self' 'nonce-${nonce}'`,
+    `script-src 'self' 'nonce-${nonce}'`,
+    `connect-src 'self' ${SUPABASE_ORIGIN} ${SUPABASE_WS} https://*.supabase.co wss://*.supabase.co`,
+  ].join("; ");
+}
+
+function addNonceToInlineResources(html: string, nonce: string): string {
+  return html
+    .replace(/<script(?![^>]*\bsrc=)(?![^>]*\bnonce=)([^>]*)>/gi, `<script nonce="${nonce}"$1>`)
+    .replace(/<style(?![^>]*\bnonce=)([^>]*)>/gi, `<style nonce="${nonce}"$1>`);
+}
 
 // The Lovable editor renders the app inside an iframe, so frame blocking is
 // applied only on the published site, never on preview/sandbox hosts.
@@ -80,21 +106,32 @@ function isEmbeddablePreviewHost(request: Request): boolean {
   }
 }
 
-function withSecurityHeaders(request: Request, response: Response): Response {
+async function withSecurityHeaders(request: Request, response: Response): Promise<Response> {
   const headers = new Headers(response.headers);
   headers.set("X-Content-Type-Options", "nosniff");
   headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=(), usb=()");
-  if (isEmbeddablePreviewHost(request)) {
+  const isPreview = isEmbeddablePreviewHost(request);
+  const isAuthPage = new URL(request.url).pathname === "/auth";
+  let body: BodyInit | null = response.body;
+
+  if (isPreview) {
     headers.set(
       "Content-Security-Policy",
-      CSP.replace("frame-ancestors 'none'", "frame-ancestors *"),
+      BASE_CSP.replace("frame-ancestors 'none'", "frame-ancestors *"),
     );
   } else {
     headers.set("X-Frame-Options", "DENY");
-    headers.set("Content-Security-Policy", CSP);
+    if (isAuthPage && (headers.get("content-type") ?? "").includes("text/html")) {
+      const nonce = createNonce();
+      body = addNonceToInlineResources(await response.text(), nonce);
+      headers.delete("content-length");
+      headers.set("Content-Security-Policy", strictCsp(nonce));
+    } else {
+      headers.set("Content-Security-Policy", BASE_CSP);
+    }
   }
-  return new Response(response.body, {
+  return new Response(body, {
     status: response.status,
     statusText: response.statusText,
     headers,
@@ -106,10 +143,10 @@ export default {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return withSecurityHeaders(request, await normalizeCatastrophicSsrResponse(response));
+      return await withSecurityHeaders(request, await normalizeCatastrophicSsrResponse(response));
     } catch (error) {
       console.error(error);
-      return withSecurityHeaders(
+      return await withSecurityHeaders(
         request,
         new Response(renderErrorPage(), {
           status: 500,
