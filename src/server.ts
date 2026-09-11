@@ -112,7 +112,6 @@ async function withSecurityHeaders(request: Request, response: Response): Promis
   headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=(), usb=()");
   const isPreview = isEmbeddablePreviewHost(request);
-  const isAuthPage = new URL(request.url).pathname === "/auth";
   let body: BodyInit | null = response.body;
 
   if (isPreview) {
@@ -122,7 +121,7 @@ async function withSecurityHeaders(request: Request, response: Response): Promis
     );
   } else {
     headers.set("X-Frame-Options", "DENY");
-    if (isAuthPage && (headers.get("content-type") ?? "").includes("text/html")) {
+    if ((headers.get("content-type") ?? "").includes("text/html")) {
       const nonce = createNonce();
       body = addNonceToInlineResources(await response.text(), nonce);
       headers.delete("content-length");
