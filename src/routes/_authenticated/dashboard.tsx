@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useCurrency, createFileRoute, Link } from "@tanstack/react-router";
 import { cashSummary, stockStatus } from "@/lib/analysis";
 import { formatMoney } from "@/lib/currencies";
 import { useProducts, useProfile, useTransactions, useGroceryItems } from "@/lib/data";

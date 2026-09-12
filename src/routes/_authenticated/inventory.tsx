@@ -9,6 +9,7 @@ import {
   useSaveProduct,
   useSuppliers,
   type ProductInput,
+  useCurrency,
 } from "@/lib/data";
 import type { Product } from "@/lib/types";
 import { EmptyState, SectionHeader } from "@/components/ui-bits";

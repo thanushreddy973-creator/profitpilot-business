@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useCurrency, createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
 import { cashSummary, recommendation, stockStatus } from "@/lib/analysis";

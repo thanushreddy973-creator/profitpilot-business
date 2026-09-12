@@ -8,6 +8,7 @@ import {
   useSaveSupplier,
   useSuppliers,
   type SupplierInput,
+  useCurrency,
 } from "@/lib/data";
 import type { Supplier } from "@/lib/types";
 import { Chip, EmptyState, SectionHeader } from "@/components/ui-bits";

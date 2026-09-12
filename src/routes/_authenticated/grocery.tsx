@@ -10,6 +10,7 @@ import {
   useSuppliers,
   useTogglePurchased,
   type GroceryInput,
+  useCurrency,
 } from "@/lib/data";
 import type { GroceryItem } from "@/lib/types";
 import { Chip, EmptyState, SectionHeader, Stat } from "@/components/ui-bits";

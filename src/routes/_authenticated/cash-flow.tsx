@@ -9,6 +9,7 @@ import {
   useSaveTransaction,
   useTransactions,
   type TransactionInput,
+  useCurrency,
 } from "@/lib/data";
 import type { Transaction } from "@/lib/types";
 import { Chip, EmptyState, SectionHeader, Stat } from "@/components/ui-bits";
