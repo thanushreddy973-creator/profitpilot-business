@@ -23,7 +23,7 @@ function AIDecisions() {
   const { data: profile } = useProfile();
   const { data: products = [] } = useProducts();
   const { data: transactions = [] } = useTransactions();
-  const code = profile?.currency_code ?? "USD";
+  const code = useCurrency();
   const s = cashSummary(transactions, products, profile);
   const run = useServerFn(generateInsights);
 

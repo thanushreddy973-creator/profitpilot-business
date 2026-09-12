@@ -42,7 +42,7 @@ function Sellers() {
   const { data: products = [] } = useProducts();
   const save = useSaveSupplier();
   const remove = useDeleteSupplier();
-  const code = profile?.currency_code ?? "USD";
+  const code = useCurrency();
 
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Supplier | null>(null);

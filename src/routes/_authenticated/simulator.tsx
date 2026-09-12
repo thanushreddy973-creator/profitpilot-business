@@ -21,7 +21,7 @@ function Simulator() {
   const { data: profile } = useProfile();
   const { data: products = [] } = useProducts();
   const { data: transactions = [] } = useTransactions();
-  const code = profile?.currency_code ?? "USD";
+  const code = useCurrency();
   const summary = cashSummary(transactions, products, profile);
 
   const [productId, setProductId] = useState("");

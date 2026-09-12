@@ -21,7 +21,7 @@ function Dashboard() {
   const { data: products = [] } = useProducts();
   const { data: transactions = [] } = useTransactions();
   const { data: grocery = [] } = useGroceryItems();
-  const code = profile?.currency_code ?? "USD";
+  const code = useCurrency();
   const s = cashSummary(transactions, products, profile);
   const low = products.filter((p) => ["low", "out"].includes(stockStatus(p, profile)));
   const over = products.filter((p) => stockStatus(p, profile) === "overstock");
