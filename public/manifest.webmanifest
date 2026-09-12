@@ -1,0 +1,17 @@
+{
+  "name": "ProfitPilot — Inventory & Cash Flow",
+  "short_name": "ProfitPilot",
+  "description": "Track stock, suppliers, purchases and cash flow in one place, with plain-language recommendations built from your own numbers.",
+  "id": "/",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#17191d",
+  "theme_color": "#17191d",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
