@@ -10,6 +10,7 @@ import {
   useSuppliers,
   useTogglePurchased,
   type GroceryInput,
+  useCurrency,
 } from "@/lib/data";
 import type { GroceryItem } from "@/lib/types";
 import { Chip, EmptyState, SectionHeader, Stat } from "@/components/ui-bits";
@@ -44,7 +45,7 @@ function Grocery() {
   const save = useSaveGroceryItem();
   const remove = useDeleteGroceryItem();
   const toggle = useTogglePurchased();
-  const code = profile?.currency_code ?? "USD";
+  const code = useCurrency();
 
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<GroceryItem | null>(null);

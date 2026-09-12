@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useCurrency, createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { cashSummary } from "@/lib/analysis";
 import { formatMoney } from "@/lib/currencies";
@@ -21,7 +21,7 @@ function Simulator() {
   const { data: profile } = useProfile();
   const { data: products = [] } = useProducts();
   const { data: transactions = [] } = useTransactions();
-  const code = profile?.currency_code ?? "USD";
+  const code = useCurrency();
   const summary = cashSummary(transactions, products, profile);
 
   const [productId, setProductId] = useState("");

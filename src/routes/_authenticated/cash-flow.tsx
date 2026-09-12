@@ -9,6 +9,7 @@ import {
   useSaveTransaction,
   useTransactions,
   type TransactionInput,
+  useCurrency,
 } from "@/lib/data";
 import type { Transaction } from "@/lib/types";
 import { Chip, EmptyState, SectionHeader, Stat } from "@/components/ui-bits";
@@ -43,7 +44,7 @@ function CashFlow() {
   const { data: products = [] } = useProducts();
   const save = useSaveTransaction();
   const remove = useDeleteTransaction();
-  const code = profile?.currency_code ?? "USD";
+  const code = useCurrency();
   const s = cashSummary(transactions, products, profile);
 
   const [open, setOpen] = useState(false);

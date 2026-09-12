@@ -9,6 +9,7 @@ import {
   useSaveProduct,
   useSuppliers,
   type ProductInput,
+  useCurrency,
 } from "@/lib/data";
 import type { Product } from "@/lib/types";
 import { EmptyState, SectionHeader } from "@/components/ui-bits";
@@ -44,7 +45,7 @@ function Inventory() {
   const { data: suppliers = [] } = useSuppliers();
   const save = useSaveProduct();
   const remove = useDeleteProduct();
-  const code = profile?.currency_code ?? "USD";
+  const code = useCurrency();
 
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);

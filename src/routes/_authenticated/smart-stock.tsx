@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useCurrency, createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   recommendation,
@@ -28,7 +28,7 @@ const ACTIONS: Recommendation[] = ["Reorder", "Reduce purchasing", "Monitor", "H
 function SmartStock() {
   const { data: profile } = useProfile();
   const { data: products = [] } = useProducts();
-  const code = profile?.currency_code ?? "USD";
+  const code = useCurrency();
   const [action, setAction] = useState<"all" | Recommendation>("all");
 
   const analysed = products.map((p) => ({ product: p, ...recommendation(p, profile) }));

@@ -10,9 +10,30 @@ async function currentUserId(): Promise<string> {
 
 /* ---------- profile ---------- */
 
+const CURRENCY_CACHE_KEY = "profitpilot.currency";
+
+function cacheCurrency(code: string | null | undefined) {
+  if (typeof window === "undefined" || !code) return;
+  try {
+    window.localStorage.setItem(CURRENCY_CACHE_KEY, code);
+  } catch {
+    /* storage unavailable */
+  }
+}
+
+function cachedCurrency(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    return window.localStorage.getItem(CURRENCY_CACHE_KEY);
+  } catch {
+    return null;
+  }
+}
+
 export function useProfile() {
   return useQuery({
     queryKey: ["profile"],
+    staleTime: 30_000,
     queryFn: async (): Promise<Profile | null> => {
       const uid = await currentUserId();
       const { data, error } = await supabase
@@ -21,7 +42,10 @@ export function useProfile() {
         .eq("id", uid)
         .maybeSingle();
       if (error) throw error;
-      if (data) return data as unknown as Profile;
+      if (data) {
+        cacheCurrency((data as unknown as Profile).currency_code);
+        return data as unknown as Profile;
+      }
       const { data: created, error: insertError } = await supabase
         .from("profiles")
         .insert({ id: uid })
@@ -33,15 +57,34 @@ export function useProfile() {
   });
 }
 
+/**
+ * The currency every screen should format with: the saved profile value,
+ * falling back to the last known value while the profile is loading.
+ */
+export function useCurrency(): string {
+  const { data: profile } = useProfile();
+  return profile?.currency_code ?? cachedCurrency() ?? "USD";
+}
+
 export function useUpdateProfile() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (patch: Partial<Profile>) => {
+    mutationFn: async (patch: Partial<Profile>): Promise<Profile> => {
       const uid = await currentUserId();
-      const { error } = await supabase.from("profiles").update(patch).eq("id", uid);
+      // Upsert so the save still lands if the profile row is missing.
+      const { data, error } = await supabase
+        .from("profiles")
+        .upsert({ ...patch, id: uid }, { onConflict: "id" })
+        .select("*")
+        .single();
       if (error) throw error;
+      return data as unknown as Profile;
     },
-    onSuccess: () => qc.invalidateQueries(),
+    onSuccess: (profile) => {
+      cacheCurrency(profile.currency_code);
+      qc.setQueryData(["profile"], profile);
+      qc.invalidateQueries();
+    },
   });
 }
 
