@@ -1,7 +1,7 @@
 {
-  "name": "ProfitPilot — Inventory & Cash Flow",
+  "name": "ProfitPilot",
   "short_name": "ProfitPilot",
-  "description": "Track stock, suppliers, purchases and cash flow in one place, with plain-language recommendations built from your own numbers.",
+  "description": "Smart Business Finance",
   "id": "/",
   "start_url": "/dashboard",
   "scope": "/",
