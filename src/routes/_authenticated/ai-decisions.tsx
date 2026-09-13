@@ -1,9 +1,9 @@
-import { useCurrency, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
 import { cashSummary, recommendation, stockStatus } from "@/lib/analysis";
 import { formatMoney } from "@/lib/currencies";
-import { useProducts, useProfile, useTransactions } from "@/lib/data";
+import { useCurrency, useProducts, useProfile, useTransactions } from "@/lib/data";
 import { generateInsights } from "@/lib/ai.functions";
 import { EmptyState, SectionHeader } from "@/components/ui-bits";
 

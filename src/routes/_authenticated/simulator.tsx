@@ -1,8 +1,8 @@
-import { useCurrency, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { cashSummary } from "@/lib/analysis";
 import { formatMoney } from "@/lib/currencies";
-import { useProducts, useProfile, useTransactions } from "@/lib/data";
+import { useCurrency, useProducts, useProfile, useTransactions } from "@/lib/data";
 import { EmptyState, SectionHeader, Stat } from "@/components/ui-bits";
 
 export const Route = createFileRoute("/_authenticated/simulator")({
