@@ -63,32 +63,6 @@ const BASE_CSP = [
   `connect-src 'self' ${SUPABASE_ORIGIN} ${SUPABASE_WS} https://*.supabase.co wss://*.supabase.co`,
 ].join("; ");
 
-function createNonce(): string {
-  const bytes = crypto.getRandomValues(new Uint8Array(18));
-  return Buffer.from(bytes).toString("base64");
-}
-
-function strictCsp(nonce: string): string {
-  return [
-    "default-src 'self'",
-    "base-uri 'self'",
-    "object-src 'none'",
-    "frame-ancestors 'none'",
-    "form-action 'self'",
-    "img-src 'self' data: blob: https:",
-    "font-src 'self' data:",
-    `style-src 'self' 'nonce-${nonce}'`,
-    `script-src 'self' 'nonce-${nonce}'`,
-    `connect-src 'self' ${SUPABASE_ORIGIN} ${SUPABASE_WS} https://*.supabase.co wss://*.supabase.co`,
-  ].join("; ");
-}
-
-function addNonceToInlineResources(html: string, nonce: string): string {
-  return html
-    .replace(/<script(?![^>]*\bsrc=)(?![^>]*\bnonce=)([^>]*)>/gi, `<script nonce="${nonce}"$1>`)
-    .replace(/<style(?![^>]*\bnonce=)([^>]*)>/gi, `<style nonce="${nonce}"$1>`);
-}
-
 // The Lovable editor renders the app inside an iframe, so frame blocking is
 // applied only on the published site, never on preview/sandbox hosts.
 function isEmbeddablePreviewHost(request: Request): boolean {
@@ -112,7 +86,7 @@ async function withSecurityHeaders(request: Request, response: Response): Promis
   headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=(), usb=()");
   const isPreview = isEmbeddablePreviewHost(request);
-  let body: BodyInit | null = response.body;
+  const body: BodyInit | null = response.body;
 
   if (isPreview) {
     headers.set(
