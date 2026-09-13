@@ -1,4 +1,4 @@
-import { useCurrency, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   recommendation,
@@ -8,7 +8,7 @@ import {
   type Recommendation,
 } from "@/lib/analysis";
 import { formatMoney } from "@/lib/currencies";
-import { useProducts, useProfile } from "@/lib/data";
+import { useCurrency, useProducts, useProfile } from "@/lib/data";
 import { EmptyState, SectionHeader, Stat } from "@/components/ui-bits";
 
 export const Route = createFileRoute("/_authenticated/smart-stock")({

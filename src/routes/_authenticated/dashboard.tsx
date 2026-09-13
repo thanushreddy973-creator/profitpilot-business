@@ -1,7 +1,7 @@
-import { useCurrency, createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { cashSummary, stockStatus } from "@/lib/analysis";
 import { formatMoney } from "@/lib/currencies";
-import { useProducts, useProfile, useTransactions, useGroceryItems } from "@/lib/data";
+import { useCurrency, useProducts, useProfile, useTransactions, useGroceryItems } from "@/lib/data";
 import { Chip, EmptyState, SectionHeader, Stat } from "@/components/ui-bits";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
