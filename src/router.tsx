@@ -14,3 +14,6 @@ export const getRouter = () => {
 
   return router;
 };
+
+// Deployment marker: force a fresh client bundle for the published build.
+export const BUILD_MARKER = "2026-09-13-csp-fix";
