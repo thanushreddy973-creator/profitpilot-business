@@ -121,15 +121,12 @@ async function withSecurityHeaders(request: Request, response: Response): Promis
     );
   } else {
     headers.set("X-Frame-Options", "DENY");
-    if ((headers.get("content-type") ?? "").includes("text/html")) {
-      const nonce = createNonce();
-      body = addNonceToInlineResources(await response.text(), nonce);
-      headers.delete("content-length");
-      headers.set("Content-Security-Policy", strictCsp(nonce));
-    } else {
-      headers.set("Content-Security-Policy", BASE_CSP);
-    }
+    // Inline bootstrap scripts/styles emitted by the SSR renderer (including the
+    // runtime config the app needs) must keep working on the published site, so
+    // the published policy stays on the permissive base CSP.
+    headers.set("Content-Security-Policy", BASE_CSP);
   }
+
   return new Response(body, {
     status: response.status,
     statusText: response.statusText,
