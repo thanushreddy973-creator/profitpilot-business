@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { ProfitPilotLogo } from "@/components/ProfitPilotLogo";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/auth")({
@@ -77,9 +78,7 @@ function AuthPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
       <div className="panel-raised w-full max-w-sm p-6">
         <div className="flex items-center gap-2.5">
-          <div className="num grid size-7 place-items-center rounded-md bg-elevated text-[11px] font-semibold text-accent ring-1 ring-white/5">
-            P
-          </div>
+          <ProfitPilotLogo className="size-7 shrink-0 rounded-md" />
           <div className="leading-none">
             <div className="text-[13px] font-semibold tracking-tight">ProfitPilot</div>
             <div className="num mt-1 text-[10px] text-faint">Operator workspace</div>
