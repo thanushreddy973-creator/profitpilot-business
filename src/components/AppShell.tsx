@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
+import { ProfitPilotLogo } from "@/components/ProfitPilotLogo";
 import { useProfile } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
@@ -53,9 +54,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 hidden w-60 flex-col border-r border-line bg-sidebar px-3 py-4 lg:flex">
         <div className="flex items-center gap-2.5 px-2">
-          <div className="num grid size-7 place-items-center rounded-md bg-elevated text-[11px] font-semibold text-accent ring-1 ring-white/5">
-            P
-          </div>
+          <ProfitPilotLogo className="size-7 shrink-0 rounded-md" />
           <div className="leading-none">
             <div className="text-[13px] font-semibold tracking-tight">ProfitPilot</div>
             <div className="num mt-1 text-[10px] text-faint">Operator workspace</div>
@@ -88,9 +87,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <header className="sticky top-0 z-20 border-b border-line bg-background/95 px-4 py-3 backdrop-blur">
           <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-2.5">
-              <div className="num grid size-7 shrink-0 place-items-center rounded-md bg-elevated text-[11px] font-semibold text-accent ring-1 ring-white/5 lg:hidden">
-                P
-              </div>
+              <ProfitPilotLogo className="size-7 shrink-0 rounded-md lg:hidden" />
               <div className="min-w-0 leading-none">
                 <div className="truncate text-[13px] font-semibold tracking-tight">
                   {profile?.business_name ?? "ProfitPilot"}
